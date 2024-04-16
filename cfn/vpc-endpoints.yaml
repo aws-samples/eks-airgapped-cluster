@@ -1,0 +1,199 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Cloudformation template for creating VPC Endpoints for EKS Private Cluster
+
+Parameters:
+  pVPCID:
+    Description: VPC Id
+    Type: String
+
+  pSharedVPCEndpointSubnetIds:
+    Description: 'Consumer VPC SubnetIds for VPC Endpoint'
+    Type: CommaDelimitedList
+  
+  pSharedVPCnrPrivateSubnetCIDRs:
+     Description: 'VPC subnet CIDR'
+     Type: String
+  
+
+Resources:
+  rEndPointSecgrp:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for private endpoints
+      GroupName: PrivateEndPointSecGroup
+      SecurityGroupEgress: 
+        - IpProtocol: all
+          FromPort: 8
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+      SecurityGroupIngress: 
+        - IpProtocol: all
+          FromPort: 8
+          ToPort: -1
+          CidrIp: !Ref pSharedVPCnrPrivateSubnetCIDRs
+      VpcId: !Ref pVPCID
+
+  rS3InterfaceVpcEndPoint:
+    Type: "AWS::EC2::VPCEndpoint"
+    Properties:
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.s3'
+      VpcEndpointType: 'Interface'
+      VpcId: !Ref pVPCID # Required
+      SubnetIds: !Ref pSharedVPCEndpointSubnetIds
+      SecurityGroupIds: 
+        - !GetAtt rEndPointSecgrp.GroupId
+      PrivateDnsEnabled: True
+
+  rS3gatewayVpcEndPoint:
+    Type: "AWS::EC2::VPCEndpoint"
+    Properties:
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.s3'
+      VpcId: !Ref pVPCID # Required
+      
+
+  rSsmApiVpcEndPoint:
+    Type: "AWS::EC2::VPCEndpoint"
+    Properties:
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.ssm'
+      VpcEndpointType: 'Interface'
+      VpcId: !Ref pVPCID # Required
+      SubnetIds: !Ref pSharedVPCEndpointSubnetIds
+      SecurityGroupIds: 
+       - !GetAtt rEndPointSecgrp.GroupId
+      PrivateDnsEnabled: True
+
+  rSsmmMessageVpcEndPoint:
+    Type: "AWS::EC2::VPCEndpoint"
+    Properties:
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.ssmmessages'
+      VpcEndpointType: 'Interface'
+      VpcId: !Ref pVPCID # Required
+      SubnetIds: !Ref pSharedVPCEndpointSubnetIds
+      SecurityGroupIds: 
+       - !GetAtt rEndPointSecgrp.GroupId
+      PrivateDnsEnabled: True
+
+  rDynamoDBVpcEndPoint:
+    Type: "AWS::EC2::VPCEndpoint"
+    Properties:
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.dynamodb'
+      VpcEndpointType: 'Gateway'
+      VpcId: !Ref pVPCID # Required
+      
+      
+  rEcrDockerEndPoint:
+    Type: "AWS::EC2::VPCEndpoint"
+    Properties:
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.ecr.dkr'
+      VpcEndpointType: 'Interface'
+      VpcId: !Ref pVPCID # Required
+      SubnetIds: !Ref pSharedVPCEndpointSubnetIds
+      SecurityGroupIds: 
+       - !GetAtt rEndPointSecgrp.GroupId
+      PrivateDnsEnabled: True
+
+  rEcrApiEndPoint:
+    Type: "AWS::EC2::VPCEndpoint"
+    Properties:
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.ecr.api'
+      VpcEndpointType: 'Interface'
+      VpcId: !Ref pVPCID # Required
+      SubnetIds: !Ref pSharedVPCEndpointSubnetIds
+      SecurityGroupIds: 
+       - !GetAtt rEndPointSecgrp.GroupId
+      PrivateDnsEnabled: True
+
+  rStsEndPoint:
+    Type: "AWS::EC2::VPCEndpoint"
+    Properties:
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.sts'
+      VpcEndpointType: 'Interface'
+      VpcId: !Ref pVPCID # Required
+      SubnetIds: !Ref pSharedVPCEndpointSubnetIds
+      SecurityGroupIds: 
+       - !GetAtt rEndPointSecgrp.GroupId
+      PrivateDnsEnabled: True
+
+  rEfsEndPoint:
+    Type: "AWS::EC2::VPCEndpoint"
+    Properties:
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.elasticfilesystem'
+      VpcEndpointType: 'Interface'
+      VpcId: !Ref pVPCID # Required
+      SubnetIds: !Ref pSharedVPCEndpointSubnetIds
+      SecurityGroupIds: 
+       - !GetAtt rEndPointSecgrp.GroupId
+      PrivateDnsEnabled: True
+
+  rElbEndPoint:
+    Type: "AWS::EC2::VPCEndpoint"
+    Properties:
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.elasticloadbalancing'
+      VpcEndpointType: 'Interface'
+      VpcId: !Ref pVPCID # Required
+      SubnetIds: !Ref pSharedVPCEndpointSubnetIds
+      SecurityGroupIds: 
+       - !GetAtt rEndPointSecgrp.GroupId
+      PrivateDnsEnabled: True
+
+  rEc2ApiEndPoint:
+    Type: "AWS::EC2::VPCEndpoint"
+    Properties:
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.ec2'
+      VpcEndpointType: 'Interface'
+      VpcId: !Ref pVPCID # Required
+      SubnetIds: !Ref pSharedVPCEndpointSubnetIds
+      SecurityGroupIds: 
+       - !GetAtt rEndPointSecgrp.GroupId
+      PrivateDnsEnabled: True
+
+  rEc2MessageEndPoint:
+    Type: "AWS::EC2::VPCEndpoint"
+    Properties:
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.ec2messages'
+      VpcEndpointType: 'Interface'
+      VpcId: !Ref pVPCID # Required
+      SubnetIds: !Ref pSharedVPCEndpointSubnetIds
+      SecurityGroupIds: 
+      - !GetAtt rEndPointSecgrp.GroupId
+      PrivateDnsEnabled: True
+
+  rEksEndPoint:
+    Type: "AWS::EC2::VPCEndpoint"
+    Properties:
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.eks'
+      VpcEndpointType: 'Interface'
+      VpcId: !Ref pVPCID # Required
+      SubnetIds: !Ref pSharedVPCEndpointSubnetIds
+      SecurityGroupIds: 
+       - !GetAtt rEndPointSecgrp.GroupId
+      PrivateDnsEnabled: True
+
+  rLambdaEndPoint:
+    Type: "AWS::EC2::VPCEndpoint"
+    Properties:
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.lambda'
+      VpcEndpointType: 'Interface'
+      VpcId: !Ref pVPCID # Required
+      SubnetIds: !Ref pSharedVPCEndpointSubnetIds
+      SecurityGroupIds: 
+       - !GetAtt rEndPointSecgrp.GroupId
+      PrivateDnsEnabled: True
+
+  rCloudformationEndPoint:
+    Type: "AWS::EC2::VPCEndpoint"
+    Properties:
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.cloudformation'
+      VpcEndpointType: 'Interface'
+      VpcId: !Ref pVPCID # Required
+      SubnetIds: !Ref pSharedVPCEndpointSubnetIds
+      SecurityGroupIds: 
+       - !GetAtt rEndPointSecgrp.GroupId
+      PrivateDnsEnabled: True
+ 
+Outputs:
+  ExportsStackName:
+    Value: !Ref "AWS::StackName"
+    Description: Name for the stack that just got created as a result of this product
+    Export:
+      Name: !Sub "ExportsStackName-${AWS::StackName}"
