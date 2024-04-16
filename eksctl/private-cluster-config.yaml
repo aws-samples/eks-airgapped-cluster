@@ -1,0 +1,20 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+    name: eks-private-demo-cluster
+    region: eu-central-1  # Replace with your desired region
+    version: "1.27"  # Replace with your desired Kubernetes version
+vpc:
+    id: "vpc-xxxxx"
+    cidr: "xxxx"
+    clusterEndpoints:
+      publicAccess:  false
+      privateAccess: true
+    subnets:
+      private:
+        eu-central-1a:
+          id: "subnet-xxxxx"
+          cidr: "xxxx"
+        eu-central-1b:
+          id: "subnet-xxxx"
+          cidr: "xxxx"
