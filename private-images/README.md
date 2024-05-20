@@ -1,6 +1,6 @@
 # Create ECR private repository and push the images
 ## Step 1:
-In EKS Private Cluster we want to deploy  a sample add-ons like Multus using kubernates manifests. We will use this gitlab https://github.com/aws/amazon-vpc-cni-k8s/blob/master/config/multus/README.md
+In EKS Private Cluster we want to deploy  a sample add-ons like Multus using kubernates manifests. We will use this github https://github.com/aws/amazon-vpc-cni-k8s/blob/master/config/multus/README.md
 Pull the public ECR image and push it to your Private ECR, refer to the private ECR image in your manifests file and apply them on your cluster.
 
 Create  a ECR  private repository in your AWS account. 
