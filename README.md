@@ -40,6 +40,8 @@ By leveraging these resources, you can effectively configure a robust and secure
 
 ## Creating an EKS Private Cluster Nodegroup <a name="Nodegroup"></a>
 
+   Follow the steps in [EKS Nodegroup Creation](./nodegroup/README.md)
+
 ## Bootstrap EKS Private Cluster with Multus Addon<a name="bootstrap"></a>
    Follow the steps in [EKS Add ons](./private-images/README.md)
     
