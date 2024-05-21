@@ -1,6 +1,10 @@
 # Create ECR private repository and push the images
 ## Step 1:
+<<<<<<< HEAD
 In EKS Private Cluster we want to deploy  a sample add-ons like Multus using kubernates manifests. We will use this gitlab https://github.com/aws/amazon-vpc-cni-k8s/blob/master/config/multus/README.md
+=======
+In EKS Private Cluster we want to deploy  a sample add-ons like Multus using kubernates manifests. We will use this github https://github.com/aws/amazon-vpc-cni-k8s/blob/master/config/multus/README.md
+>>>>>>> 80264aa220b2228d0f6c03a9b6dde0b429c7b888
 Pull the public ECR image and push it to your Private ECR, refer to the private ECR image in your manifests file and apply them on your cluster.
 
 Create  a ECR  private repository in your AWS account. 
@@ -31,7 +35,11 @@ Once you have sccessfully pushed the image to your local ECR private repository,
 A sample manifests file is  [Multus](././multus-daemonset-thick.yaml)
 
 
+<<<<<<< HEAD
 Finally, apply it to the cluster. Please replace the aws_account and aws_region with your ECR repositories account id and region
+=======
+Finally, apply it to the cluster
+>>>>>>> 80264aa220b2228d0f6c03a9b6dde0b429c7b888
 
 ```bash linenums="1"
 kubectl apply -f multus-daemonset-thick.yml
@@ -54,4 +62,8 @@ You can also verify the multus version in the pod
 kubectl -n kube-system exec -it kube-multus-ds-6pfgn  -c kube-multus -- /usr/src/multus-cni/bin/multus --version                                                                                                                                     
 multus: version:v4.0.2-eksbuild.1(clean,released), commit:f03765681fe81ee1e0633ee1734bf48ab3bccf2b, date:2023-11-15T18:36:48+00:00
 
+<<<<<<< HEAD
 ``` 
+=======
+``` 
+>>>>>>> 80264aa220b2228d0f6c03a9b6dde0b429c7b888
